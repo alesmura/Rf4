@@ -27,7 +27,7 @@ public class Rf4Batch {
 	@Autowired
 	private JobLauncher jobLauncher;
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 300_000)
 	public void run() {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())

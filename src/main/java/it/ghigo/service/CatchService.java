@@ -13,7 +13,7 @@ public class CatchService {
 	private CatchRepository catchRepository;
 
 	public Catch create(Catch c) {
-		Optional<Catch> opt = catchRepository.findByRegionAndLocationAndFishAndWeightKgAndLureAndDt(//
+		Optional<Catch> opt = catchRepository.getByRegionAndLocationAndFishAndWeightKgAndLureAndDt(//
 				c.getRegion(), c.getLocation(), c.getFish(), c.getWeightKg(), c.getLure(), c.getDt());
 		if (opt.isPresent())
 			return opt.get();
