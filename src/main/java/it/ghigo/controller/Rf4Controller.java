@@ -29,7 +29,7 @@ public class Rf4Controller {
 	}
 
 	@GetMapping("/catchList")
-	public String catchList(@RequestParam String fishParam, Model model) {
+	public String catchList(@RequestParam(defaultValue = "") String fishParam, Model model) {
 		CatchSearchParameter catchSearchParameter = new CatchSearchParameter();
 		if (StringUtils.isNotBlank(fishParam))
 			catchSearchParameter.setFishName(fishParam);
