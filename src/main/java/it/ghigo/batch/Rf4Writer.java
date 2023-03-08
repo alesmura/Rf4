@@ -1,6 +1,7 @@
 package it.ghigo.batch;
 
-import org.springframework.batch.item.Chunk;
+import java.util.List;
+
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,8 +14,8 @@ public class Rf4Writer implements ItemWriter<Catch> {
 	private CatchService catchService;
 
 	@Override
-	public void write(Chunk<? extends Catch> chunk) throws Exception {
-		for (Catch cattura : chunk) {
+	public void write(List<? extends Catch> items) throws Exception {
+		for (Catch cattura : items) {
 			catchService.create(cattura);
 		}
 	}

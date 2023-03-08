@@ -4,16 +4,14 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import it.ghigo.model.Catch;
 import it.ghigo.service.CatchService;
@@ -21,9 +19,9 @@ import it.ghigo.service.CatchService;
 @Configuration
 public class Rf4Batch {
 	@Autowired
-	private JobRepository jobRepository;
+	private JobBuilderFactory jobBuilderFactory;
 	@Autowired
-	private PlatformTransactionManager transactionManager;
+	private StepBuilderFactory stepBuilderFactory;
 	@Autowired
 	private JobLauncher jobLauncher;
 
@@ -34,12 +32,13 @@ public class Rf4Batch {
 					.toJobParameters();
 			jobLauncher.run(getRf4Job(), jobParameters);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 
 	@Bean
 	public Job getRf4Job() {
-		return new JobBuilder("rf4Job", jobRepository) //
+		return jobBuilderFactory.get("rf4Job") //
 				.incrementer(new RunIdIncrementer()) //
 				.listener(getListener()) //
 				.flow(getStep()) //
@@ -49,8 +48,8 @@ public class Rf4Batch {
 
 	@Bean
 	public Step getStep() {
-		return new StepBuilder("step", jobRepository) //
-				.<String, Catch>chunk(1000, transactionManager)//
+		return stepBuilderFactory.get("step") //
+				.<String, Catch>chunk(1000)//
 				.reader(getReader()) //
 				.processor(getProcessor()) //
 				.writer(getWriter()) //

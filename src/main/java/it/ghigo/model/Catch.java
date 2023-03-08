@@ -3,13 +3,12 @@ package it.ghigo.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity
+@javax.persistence.Entity
 @Table(name = "CATCH")
 public class Catch implements Serializable {
 	private static final long serialVersionUID = 1L;

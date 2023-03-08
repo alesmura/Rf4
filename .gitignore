@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 DB_RF4/
+.dbeaver
 
 ### FILE ###
 derby.log
@@ -11,6 +12,7 @@ mvnw
 mvnw.cmd
 maven-wrapper.jar
 maven-wrapper.properties
+*.sql
 
 ### STS ###
 .apt_generated

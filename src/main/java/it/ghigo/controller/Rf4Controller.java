@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.ghigo.model.Catch;
 import it.ghigo.repository.CatchRepository;
@@ -23,22 +22,15 @@ public class Rf4Controller {
 	@Autowired
 	private CatchRepository repository;
 
-	@GetMapping("/api/all")
-	@ResponseBody
-	public Iterable<Catch> getAll() {
-
-		return repository.findAll();
-	}
-
-	@GetMapping("/rf4")
-	public String index(Model model) {
+	@GetMapping("/list")
+	public String list(Model model) {
 		model.addAttribute("catchSearch", new Catch());
 		model.addAttribute("catchList", new ArrayList<>());
-		return "index";
+		return "list";
 	}
 
-	@PostMapping("/rf4")
-	public String indexSubmit(@ModelAttribute Catch catchSearch, Model model) {
+	@PostMapping("/list")
+	public String listSubmit(@ModelAttribute Catch catchSearch, Model model) {
 		List<Catch> catchList = new ArrayList<>();
 		if (StringUtils.isNotBlank(catchSearch.getLocation()) || StringUtils.isNotBlank(catchSearch.getFish())
 				|| StringUtils.isNotBlank(catchSearch.getLure())) {
@@ -63,6 +55,18 @@ public class Rf4Controller {
 		}
 		model.addAttribute("catchSearch", catchSearch);
 		model.addAttribute("catchList", catchList);
+		return "list";
+	}
+
+	@GetMapping("/")
+	public String index() {
+
 		return "index";
+	}
+
+	@GetMapping("/contact")
+	public String contact() {
+
+		return "contact";
 	}
 }

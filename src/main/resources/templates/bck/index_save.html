@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <title>Rf4 catches</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Rf4 catches</h1>
+    <table class="table">
+        <thead>
+			<form action="#" th:action="@{/rf4}" th:object="${catchSearch}" method="post">
+				<tr>
+					<th><input type="text" th:field="*{location}" size="15"/></th>
+	                <th><input type="text" th:field="*{fish}" /></th>
+	                <th></th>
+	                <th><input type="text" th:field="*{lure}" size="25"/></th>
+	                <th></th>
+	                <th><input type="submit" value="Search" /></th>
+				</tr>
+			</form>
+            <tr>
+                <th>Location</th>
+                <th>Fish</th>
+                <th>Weight</th>
+                <th>Lure</th>
+                <th>Date</th>
+                <th>Region</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="catch : ${catchList}">
+                <td th:text="${catch.location}"></td>
+                <td th:text="${catch.fish}"></td>
+                <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
+                <td th:text="${catch.lure}"></td>
+                <td th:text="${#dates.format(catch.dt, 'dd.MM.YY')}"></td>
+                <td th:text="${catch.region}" align="center"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
