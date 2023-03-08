@@ -52,6 +52,10 @@ public class Rf4Reader implements ItemReader<String> {
 			if (fishElement == null)
 				continue;
 			String fish = fishElement.text();
+			String fishIcon = Stream
+					.of(element.selectFirst("div.fish").selectFirst("div.item_icon").attr("style").split(";"))//
+					.filter(s -> s.contains("background-image:"))
+					.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
 			Elements records = element.children().select("div.row");
 			for (Element record : records) {
 				Element weightElement = record.select("div.weight").first();
@@ -65,6 +69,7 @@ public class Rf4Reader implements ItemReader<String> {
 				sb.append(region).append(Rf4Processor.SEP);
 				sb.append(location).append(Rf4Processor.SEP);
 				sb.append(fish).append(Rf4Processor.SEP);
+				sb.append(fishIcon).append(Rf4Processor.SEP);
 				sb.append(getWeightKg(weightElement)).append(Rf4Processor.SEP);
 				sb.append(bait).append(Rf4Processor.SEP);
 				sb.append(data);

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{layouts/main}">
+	<head>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<table class="table table-bordered table-responsive">
+				<thead>
+					<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+						<tr>
+							<th><input type="text" th:field="*{location}" /></th>
+			                <th><input type="text" th:field="*{fishName}" /></th>
+			                <th></th>
+			                <th><input type="text" th:field="*{lure}" /></th>
+			                <th></th>
+			                <td align="center"><input type="submit" value="Search" /></td>
+						</tr>
+					</form>
+		            <tr>
+		                <th>Location</th>
+		                <th>Fish</th>
+		                <th>Weight kg</th>
+		                <th>Lure</th>
+		                <th>Date</th>
+		                <th>Region</th>
+		            </tr>
+				</thead>
+				<tbody>
+					<tr th:each="catch : ${catchList}">
+			            <td th:text="${catch.location}"></td>
+			            <td th:text="${catch.fish.name}"></td>
+			            <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
+			            <td th:text="${catch.lure}"></td>
+			            <td th:text="${#dates.format(catch.dt, 'dd.MM.YY')}" align="center"></td>
+			            <td th:text="${catch.region}" align="center"></td>
+			        </tr>
+				</tbody>
+			</table>                      
+		</div>
+	</body>
+</html>

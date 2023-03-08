@@ -30,20 +30,18 @@ public class Rf4Batch {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
 					.toJobParameters();
-			jobLauncher.run(getRf4Job(), jobParameters);
+			{
+				Job rf4Job = jobBuilderFactory.get("rf4Job") //
+						.incrementer(new RunIdIncrementer()) //
+						.listener(getListener()) //
+						.flow(getStep()) //
+						.end() //
+						.build();
+				jobLauncher.run(rf4Job, jobParameters);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	@Bean
-	public Job getRf4Job() {
-		return jobBuilderFactory.get("rf4Job") //
-				.incrementer(new RunIdIncrementer()) //
-				.listener(getListener()) //
-				.flow(getStep()) //
-				.end() //
-				.build();
 	}
 
 	@Bean

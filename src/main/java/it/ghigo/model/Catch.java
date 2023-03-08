@@ -6,11 +6,12 @@ import java.util.Date;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @javax.persistence.Entity
 @Table(name = "CATCH")
-public class Catch implements Serializable {
+public class Catch implements Serializable, Comparable<Catch> {
 	private static final long serialVersionUID = 1L;
 	//
 	@Id
@@ -18,7 +19,8 @@ public class Catch implements Serializable {
 	private Long id;
 	private String region;
 	private String location;
-	private String fish;
+	@OneToOne
+	private Fish fish;
 	private double weightKg;
 	private String lure;
 	private Date dt;
@@ -40,11 +42,11 @@ public class Catch implements Serializable {
 		this.location = location;
 	}
 
-	public String getFish() {
+	public Fish getFish() {
 		return fish;
 	}
 
-	public void setFish(String fish) {
+	public void setFish(Fish fish) {
 		this.fish = fish;
 	}
 
@@ -78,5 +80,19 @@ public class Catch implements Serializable {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	@Override
+	public int compareTo(Catch oth) {
+		int ret = this.getLocation().compareTo(oth.getLocation());
+		if (ret == 0)
+			ret = this.getFish().getName().compareTo(oth.getFish().getName());
+		if (ret == 0)
+			ret = -Double.compare(this.getWeightKg(), oth.getWeightKg());
+		if (ret == 0)
+			ret = this.getDt().compareTo(oth.getDt());
+		if (ret == 0)
+			ret = this.getLure().compareTo(oth.getLure());
+		return ret;
 	}
 }

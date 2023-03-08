@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import org.springframework.batch.item.ItemProcessor;
 
 import it.ghigo.model.Catch;
+import it.ghigo.model.Fish;
 
 public class Rf4Processor implements ItemProcessor<String, Catch> {
 	public final static String SEP = "@@";
@@ -18,7 +19,12 @@ public class Rf4Processor implements ItemProcessor<String, Catch> {
 		Catch cattura = new Catch();
 		cattura.setRegion(vals[i++]);
 		cattura.setLocation(vals[i++]);
-		cattura.setFish(vals[i++]);
+		//
+		Fish fish = new Fish();
+		fish.setName(vals[i++]);
+		fish.setIcon(vals[i++]);
+		cattura.setFish(fish);
+		//
 		cattura.setWeightKg(Double.valueOf(vals[i++]));
 		cattura.setLure(vals[i++]);
 		cattura.setDt(sdf.parse(vals[i++]));
