@@ -1,5 +1,8 @@
 package it.ghigo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import it.ghigo.model.Fish;
 import it.ghigo.model.parameter.CatchSearchParameter;
 import it.ghigo.service.CatchService;
 import it.ghigo.service.FishService;
@@ -24,7 +28,17 @@ public class Rf4Controller {
 
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("fishList", fishService.findAll());
+		List<Fish> fishList = fishService.findAll();
+		List<List<Fish>> rowList = new ArrayList<>();
+		int i = 0;
+		while (i < fishList.size()) {
+			int j = i + 4;
+			if (j > fishList.size())
+				j = fishList.size();
+			rowList.add(fishList.subList(i, j));
+			i = j + 1;
+		}
+		model.addAttribute("rowList", rowList);
 		return "index";
 	}
 
