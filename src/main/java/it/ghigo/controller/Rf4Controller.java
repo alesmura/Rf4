@@ -1,6 +1,7 @@
 package it.ghigo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,21 +46,20 @@ public class Rf4Controller {
 	@GetMapping("/catchList")
 	public String catchList(@RequestParam(defaultValue = "") String fishParam, Model model) {
 		CatchSearchParameter catchSearchParameter = new CatchSearchParameter();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_YEAR, -7);
+		catchSearchParameter.setDt(cal.getTime());
 		if (StringUtils.isNotBlank(fishParam))
 			catchSearchParameter.setFishName(fishParam);
 		model.addAttribute("catchSearchParameter", catchSearchParameter);
-		model.addAttribute("catchList",
-				catchService.findByLocationContainingIgnoreCaseAndFishContainingIgnoreCaseAndLureContainingIgnoreCase(
-						catchSearchParameter));
+		model.addAttribute("catchList", catchService.findByCatchSearchParameter(catchSearchParameter));
 		return "catchList";
 	}
 
 	@PostMapping("/catchList")
 	public String catchListSubmit(@ModelAttribute CatchSearchParameter catchSearchParameter, Model model) {
 		model.addAttribute("catchSearch", catchSearchParameter);
-		model.addAttribute("catchList",
-				catchService.findByLocationContainingIgnoreCaseAndFishContainingIgnoreCaseAndLureContainingIgnoreCase(
-						catchSearchParameter));
+		model.addAttribute("catchList", catchService.findByCatchSearchParameter(catchSearchParameter));
 		return "catchList";
 	}
 

@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,18 +36,14 @@ public class CatchService {
 		return catchRepository.save(c);
 	}
 
-	public List<Catch> findByLocationContainingIgnoreCaseAndFishContainingIgnoreCaseAndLureContainingIgnoreCase(
-			CatchSearchParameter catchSearchParameter) {
-		List<Catch> catchList = new ArrayList<>();
-		if (StringUtils.isNotBlank(catchSearchParameter.getLocation())
-				|| StringUtils.isNotBlank(catchSearchParameter.getFishName())
-				|| StringUtils.isNotBlank(catchSearchParameter.getLure())) {
-			catchList = catchRepository
-					.findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCase(
-							catchSearchParameter.getLocation(), catchSearchParameter.getFishName(),
-							catchSearchParameter.getLure());
-			Collections.sort(catchList);
-		}
+	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) {
+		if (catchSearchParameter.isEmpty())
+			return new ArrayList<>();
+		List<Catch> catchList = catchRepository
+				.findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
+						catchSearchParameter.getLocation(), catchSearchParameter.getFishName(),
+						catchSearchParameter.getLure(), catchSearchParameter.getDt());
+		Collections.sort(catchList);
 		return catchList;
 	}
 }
