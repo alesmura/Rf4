@@ -48,12 +48,12 @@ public class Rf4Reader implements ItemReader<String> {
 		// Seleziona i div che hanno la classe "foo"
 		Elements elements = doc.selectFirst("div.records").select("div.row:not(.header)");
 		for (Element element : elements) {
-			Element fishElement = element.selectFirst("div.fish").selectFirst("div.text");
-			if (fishElement == null)
+			Element fishElement = element.selectFirst("div.fish");
+			Element fishTextElement = fishElement.selectFirst("div.text");
+			if (fishTextElement == null)
 				continue;
-			String fish = fishElement.text();
-			String fishIcon = Stream
-					.of(element.selectFirst("div.fish").selectFirst("div.item_icon").attr("style").split(";"))//
+			String fish = fishTextElement.text();
+			String fishIcon = Stream.of(fishElement.selectFirst("div.item_icon").attr("style").split(";"))//
 					.filter(s -> s.contains("background-image:"))
 					.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
 			Elements records = element.children().select("div.row");
@@ -62,7 +62,11 @@ public class Rf4Reader implements ItemReader<String> {
 				if (weightElement == null)
 					continue;
 				String location = record.select("div.location").first().text();
-				String bait = record.select("div.bait_icon").first().attr("title");
+				Element baitElement = record.select("div.bait_icon").first();
+				String bait = baitElement.attr("title");
+				String baitIcon = Stream.of(baitElement.attr("style").split(";"))//
+						.filter(s -> s.contains("background-image:"))
+						.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
 				String data = record.select("div.data").first().text();
 				//
 				StringBuilder sb = new StringBuilder();
@@ -72,6 +76,7 @@ public class Rf4Reader implements ItemReader<String> {
 				sb.append(fishIcon).append(Rf4Processor.SEP);
 				sb.append(getWeightKg(weightElement)).append(Rf4Processor.SEP);
 				sb.append(bait).append(Rf4Processor.SEP);
+				sb.append(baitIcon).append(Rf4Processor.SEP);
 				sb.append(data);
 				//
 				retList.add(sb.toString());

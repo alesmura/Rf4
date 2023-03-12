@@ -9,20 +9,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class CatchSearchParameter implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//
-	private String location = "";
+	private String locationName = "";
 	private boolean exactFishName = false;
 	private String fishName = "";
-	private String lure = "";
+	private String lureName = "";
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dt;
 
 	//
-	public String getLocation() {
-		return location;
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
 	public String getFishName() {
@@ -33,12 +33,12 @@ public class CatchSearchParameter implements Serializable {
 		this.fishName = fishName;
 	}
 
-	public String getLure() {
-		return lure;
+	public String getLureName() {
+		return lureName;
 	}
 
-	public void setLure(String lure) {
-		this.lure = lure;
+	public void setLureName(String lureName) {
+		this.lureName = lureName;
 	}
 
 	public Date getDt() {
@@ -58,11 +58,11 @@ public class CatchSearchParameter implements Serializable {
 	}
 
 	public boolean isEmpty() {
-		if (StringUtils.isNotBlank(getLocation()))
+		if (StringUtils.isNotBlank(getLocationName()))
 			return false;
 		if (StringUtils.isNotBlank(getFishName()))
 			return false;
-		if (StringUtils.isNotBlank(getLure()))
+		if (StringUtils.isNotBlank(getLureName()))
 			return false;
 		if (getDt() != null)
 			return false;

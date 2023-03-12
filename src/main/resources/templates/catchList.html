@@ -8,11 +8,11 @@
 				<thead>
 					<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
 						<tr>
-							<th><input type="text" th:field="*{location}" /></th>
+							<th><input type="text" th:field="*{locationName}" /></th>
 			                <th><input type="text" th:field="*{fishName}" />
 			                Exact <input type="checkbox" name="exactFishName" th:checked="*{exactFishName}" /></th>
 			                <th></th>
-			                <th><input type="text" th:field="*{lure}" /></th>
+			                <th><input type="text" th:field="*{lureName}" /></th>
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
 			                <td align="center"><input type="submit" value="Search" /></td>
 						</tr>

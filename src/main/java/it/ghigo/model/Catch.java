@@ -18,11 +18,13 @@ public class Catch implements Serializable, Comparable<Catch> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String region;
-	private String location;
+	@OneToOne
+	private Location location;
 	@OneToOne
 	private Fish fish;
 	private double weightKg;
-	private String lure;
+	@OneToOne
+	private Lure lure;
 	private Date dt;
 
 	//
@@ -34,11 +36,11 @@ public class Catch implements Serializable, Comparable<Catch> {
 		this.id = id;
 	}
 
-	public String getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 
@@ -58,11 +60,11 @@ public class Catch implements Serializable, Comparable<Catch> {
 		this.weightKg = weightKg;
 	}
 
-	public String getLure() {
+	public Lure getLure() {
 		return lure;
 	}
 
-	public void setLure(String lure) {
+	public void setLure(Lure lure) {
 		this.lure = lure;
 	}
 

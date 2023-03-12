@@ -10,12 +10,12 @@ import org.springframework.data.repository.CrudRepository;
 import it.ghigo.model.Catch;
 
 public interface CatchRepository extends CrudRepository<Catch, Long> {
-	public Optional<Catch> getByRegionAndLocationAndFishNameAndWeightKgAndLureAndDt(//
-			String region, String location, String fishName, double weightKg, String lure, Date dt);
+	public Optional<Catch> getByRegionAndLocationNameAndFishNameAndWeightKgAndLureNameAndDt(//
+			String region, String locationName, String fishName, double weightKg, String lureName, Date dt);
 
-	public List<Catch> findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
-			String location, String fishName, String lure, @Temporal Date dt);
+	public List<Catch> findByLocationNameContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureNameContainingIgnoreCaseAndDtGreaterThanEqual(
+			String locationName, String fishName, String lureName, @Temporal Date dt);
 
-	public List<Catch> findByLocationContainingIgnoreCaseAndFishNameIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
-			String location, String fishName, String lure, @Temporal Date dt);
+	public List<Catch> findByLocationNameContainingIgnoreCaseAndFishNameIgnoreCaseAndLureNameContainingIgnoreCaseAndDtGreaterThanEqual(
+			String locationName, String fishName, String lureName, @Temporal Date dt);
 }
