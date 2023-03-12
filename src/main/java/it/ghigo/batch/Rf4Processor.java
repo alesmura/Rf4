@@ -13,6 +13,7 @@ public class Rf4Processor implements ItemProcessor<String, Catch> {
 
 	@Override
 	public Catch process(String item) throws Exception {
+//		System.out.println(item);
 		String[] vals = item.split(SEP);
 		//
 		int i = 0;

@@ -10,6 +10,7 @@ public class CatchSearchParameter implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//
 	private String location = "";
+	private boolean exactFishName = false;
 	private String fishName = "";
 	private String lure = "";
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -46,6 +47,14 @@ public class CatchSearchParameter implements Serializable {
 
 	public void setDt(Date dt) {
 		this.dt = dt;
+	}
+
+	public boolean isExactFishName() {
+		return exactFishName;
+	}
+
+	public void setExactFishName(boolean exactFishName) {
+		this.exactFishName = exactFishName;
 	}
 
 	public boolean isEmpty() {

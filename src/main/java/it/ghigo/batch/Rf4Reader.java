@@ -22,7 +22,7 @@ public class Rf4Reader implements ItemReader<String> {
 		if (retList == null) {
 			retList = Collections.synchronizedList(new ArrayList<>());
 			String[] regions = new String[] { "GL", "RU", "DE", "US", "FR", "CN", "PL", "KR", "JP", "ES", "IT", "EN" };
-			Stream.of(regions).parallel().forEach(region -> {
+			Stream.of(regions).forEach(region -> {
 				try {
 					parse(region);
 				} catch (Exception e) {

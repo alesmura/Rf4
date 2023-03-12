@@ -15,4 +15,7 @@ public interface CatchRepository extends CrudRepository<Catch, Long> {
 
 	public List<Catch> findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
 			String location, String fishName, String lure, @Temporal Date dt);
+
+	public List<Catch> findByLocationContainingIgnoreCaseAndFishNameIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
+			String location, String fishName, String lure, @Temporal Date dt);
 }

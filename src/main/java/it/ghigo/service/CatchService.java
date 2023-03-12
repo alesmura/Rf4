@@ -1,10 +1,13 @@
 package it.ghigo.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,13 +39,24 @@ public class CatchService {
 		return catchRepository.save(c);
 	}
 
-	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) {
+	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) throws Exception {
 		if (catchSearchParameter.isEmpty())
 			return new ArrayList<>();
-		List<Catch> catchList = catchRepository
-				.findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
-						catchSearchParameter.getLocation(), catchSearchParameter.getFishName(),
-						catchSearchParameter.getLure(), catchSearchParameter.getDt());
+		List<Catch> catchList;
+		Date dt = catchSearchParameter.getDt();
+		if (dt == null)
+			dt = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1970");
+		if (StringUtils.isNotBlank(catchSearchParameter.getFishName()) && catchSearchParameter.isExactFishName()) {
+			catchList = catchRepository
+					.findByLocationContainingIgnoreCaseAndFishNameIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
+							catchSearchParameter.getLocation(), catchSearchParameter.getFishName(),
+							catchSearchParameter.getLure(), dt);
+		} else {
+			catchList = catchRepository
+					.findByLocationContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureContainingIgnoreCaseAndDtGreaterThanEqual(
+							catchSearchParameter.getLocation(), catchSearchParameter.getFishName(),
+							catchSearchParameter.getLure(), dt);
+		}
 		Collections.sort(catchList);
 		return catchList;
 	}
