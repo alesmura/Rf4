@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{layouts/main}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-md-3" th:each="location : ${locationList}" style="padding-top: 25px;">
+				<div class="card text-center border-dark" style="width: 18rem;">
+					<div class="card-body btn btn-light btn-outline-dark">
+						<a th:href="@{/catchList(locationParam=${location.name})}"><h5 class="card-title" th:text="${location.name}"></h5></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

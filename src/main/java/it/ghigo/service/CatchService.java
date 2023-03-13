@@ -63,7 +63,23 @@ public class CatchService {
 		Date dt = catchSearchParameter.getDt();
 		if (dt == null)
 			dt = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1970");
-		if (StringUtils.isNotBlank(catchSearchParameter.getFishName()) && catchSearchParameter.isExactFishName()) {
+		//
+		boolean searchExactFish = StringUtils.isNotBlank(catchSearchParameter.getFishName())
+				&& catchSearchParameter.isExactFishName();
+		boolean searchExactLure = StringUtils.isNotBlank(catchSearchParameter.getLureName())
+				&& catchSearchParameter.isExactLureName();
+		//
+		if (searchExactFish && searchExactLure) {
+			catchList = catchRepository
+					.findByLocationNameContainingIgnoreCaseAndFishNameIgnoreCaseAndLureNameIgnoreCaseAndDtGreaterThanEqual(
+							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
+							catchSearchParameter.getLureName(), dt);
+		} else if (!searchExactFish && searchExactLure) {
+			catchList = catchRepository
+					.findByLocationNameContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureNameIgnoreCaseAndDtGreaterThanEqual(
+							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
+							catchSearchParameter.getLureName(), dt);
+		} else if (searchExactFish && !searchExactLure) {
 			catchList = catchRepository
 					.findByLocationNameContainingIgnoreCaseAndFishNameIgnoreCaseAndLureNameContainingIgnoreCaseAndDtGreaterThanEqual(
 							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),

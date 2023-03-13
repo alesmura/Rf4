@@ -2,6 +2,7 @@ package it.ghigo.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +13,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import it.ghigo.model.LureFishCatchQueryResult;
 import it.ghigo.model.parameter.CatchSearchParameter;
 import it.ghigo.service.CatchService;
 import it.ghigo.service.FishService;
+import it.ghigo.service.LocationService;
+import it.ghigo.service.LureService;
 
 @Controller
 public class Rf4Controller {
 
 	@Autowired
 	private FishService fishService;
+
+	@Autowired
+	private LocationService locationService;
+
+	@Autowired
+	private LureService lureService;
 
 	@Autowired
 	private CatchService catchService;
@@ -36,8 +46,22 @@ public class Rf4Controller {
 		return "fishList";
 	}
 
+	@GetMapping("/locationList")
+	public String locationList(Model model) {
+		model.addAttribute("locationList", locationService.findAll());
+		return "locationList";
+	}
+
+	@GetMapping("/lureList")
+	public String lureList(Model model) {
+		model.addAttribute("lureList", lureService.findAll());
+		return "lureList";
+	}
+
 	@GetMapping("/catchList")
-	public String catchList(@RequestParam(defaultValue = "") String fishParam, Model model) throws Exception {
+	public String catchList(@RequestParam(defaultValue = "") String fishParam,
+			@RequestParam(defaultValue = "") String locationParam, @RequestParam(defaultValue = "") String lureParam,
+			Model model) throws Exception {
 		CatchSearchParameter catchSearchParameter = new CatchSearchParameter();
 		//
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -46,6 +70,15 @@ public class Rf4Controller {
 		if (StringUtils.isNotBlank(fishParam)) {
 			catchSearchParameter.setFishName(fishParam);
 			catchSearchParameter.setExactFishName(true);
+			cal.add(Calendar.DAY_OF_YEAR, -3);
+		}
+		if (StringUtils.isNotBlank(locationParam)) {
+			catchSearchParameter.setLocationName(locationParam);
+			cal.add(Calendar.DAY_OF_YEAR, -3);
+		}
+		if (StringUtils.isNotBlank(lureParam)) {
+			catchSearchParameter.setLureName(lureParam);
+			catchSearchParameter.setExactLureName(true);
 			cal.add(Calendar.DAY_OF_YEAR, -3);
 		}
 		catchSearchParameter.setDt(cal.getTime());
@@ -62,9 +95,11 @@ public class Rf4Controller {
 		return "catchList";
 	}
 
-	@GetMapping("/contact")
-	public String contact() {
-
-		return "contact";
+	@GetMapping("/xxx")
+	public void xxx() {
+		long inizio = System.currentTimeMillis();
+		List<LureFishCatchQueryResult> ret = lureService.findLureFishCatchList();
+		System.out.println(System.currentTimeMillis() - inizio);
+		return;
 	}
 }

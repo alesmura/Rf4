@@ -12,6 +12,7 @@ public class CatchSearchParameter implements Serializable {
 	private String locationName = "";
 	private boolean exactFishName = false;
 	private String fishName = "";
+	private boolean exactLureName = false;
 	private String lureName = "";
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dt;
@@ -55,6 +56,14 @@ public class CatchSearchParameter implements Serializable {
 
 	public void setExactFishName(boolean exactFishName) {
 		this.exactFishName = exactFishName;
+	}
+
+	public boolean isExactLureName() {
+		return exactLureName;
+	}
+
+	public void setExactLureName(boolean exactLureName) {
+		this.exactLureName = exactLureName;
 	}
 
 	public boolean isEmpty() {

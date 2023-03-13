@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{layouts/main}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-md-3" th:each="lure : ${lureList}" style="padding-top: 25px;">
+				<div class="card text-center border-dark" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${lure.name}"></h5>
+						<a th:href="@{/catchList(lureParam=${lure.name})}" class="btn btn-light btn-outline-dark rounded-circle"><img th:src="${lure.icon}" /></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
