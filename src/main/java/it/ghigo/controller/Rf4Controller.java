@@ -2,7 +2,6 @@ package it.ghigo.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import it.ghigo.model.LureFishCatchQueryResult;
 import it.ghigo.model.parameter.CatchSearchParameter;
 import it.ghigo.service.CatchService;
 import it.ghigo.service.FishService;
@@ -95,11 +93,19 @@ public class Rf4Controller {
 		return "catchList";
 	}
 
-	@GetMapping("/xxx")
-	public void xxx() {
+	@GetMapping("/lureCatchList")
+	public String lureCatchList(Model model) {
 		long inizio = System.currentTimeMillis();
-		List<LureFishCatchQueryResult> ret = lureService.findLureFishCatchList();
+		model.addAttribute("lureCatchList", lureService.findLureFishCatchList());
 		System.out.println(System.currentTimeMillis() - inizio);
-		return;
+		return "lureCatchList";
+	}
+
+	@GetMapping("/fishCatchList")
+	public String fishCatchList(Model model) {
+		long inizio = System.currentTimeMillis();
+		model.addAttribute("fishCatchList", fishService.findFishLureCatchList());
+		System.out.println(System.currentTimeMillis() - inizio);
+		return "fishCatchList";
 	}
 }

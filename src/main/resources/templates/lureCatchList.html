@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{layouts/main}">
+	<head>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<table class="table table-bordered table-responsive">
+				<thead>
+		            <tr>
+		                <th>Lure</th>
+		                <th>Fishes</th>
+		            </tr>
+				</thead>
+				<tbody>
+					<tr th:each="lureCatch : ${lureCatchList}">
+						<td>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="card text-center border-dark" style="width: 10rem;">
+										<div class="card-body">
+											<h8 class="card-title" th:text="${lureCatch.lureName}"></h8>
+											<br/>
+											<a th:href="@{/catchList(lureParam=${lureCatch.lureName})}" class="btn btn-light btn-outline-dark rounded-circle"><img th:src="${lureCatch.lureIcon}" /></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+			            <td>
+							<div class="row">
+								<div class="col-md-2" th:each="fishCatch : ${lureCatch.fishCatchList}">
+									<div class="card text-center border-dark" style="width: 10rem;">
+										<div class="card-body">
+											<h8 class="card-title" th:text="${fishCatch.fishName}"></h8>
+											<br/>
+											<div th:text="${fishCatch.count}"></div>
+											<a th:href="@{/catchList(fishParam=${fishCatch.fishName})}" class="btn btn-light btn-outline-dark rounded-circle"><img th:src="${fishCatch.fishIcon}" /></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+			        </tr>
+				</tbody>
+			</table>                      
+		</div>
+	</body>
+</html>

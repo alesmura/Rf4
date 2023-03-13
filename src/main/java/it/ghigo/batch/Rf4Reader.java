@@ -11,9 +11,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 
 public class Rf4Reader implements ItemReader<String> {
+	private static final Logger log = LoggerFactory.getLogger(Rf4Reader.class);
 	private List<String> retList;
 	private int lastIndex = 0;
 
@@ -40,6 +43,8 @@ public class Rf4Reader implements ItemReader<String> {
 	}
 
 	private void parse(String region) throws Exception {
+		long inizio = System.currentTimeMillis();
+		log.info("START parsing region " + region);
 		// Recupera il contenuto della pagina web
 		URL url = new URL("https://rf4game.com/records/weekly/region/" + region + "/");
 		String content = Jsoup.parse(url, 30000).outerHtml();
@@ -82,6 +87,7 @@ public class Rf4Reader implements ItemReader<String> {
 				retList.add(sb.toString());
 			}
 		}
+		log.info("END parsing region " + region + " in -> " + (System.currentTimeMillis() - inizio));
 	}
 
 	private String getWeightKg(Element weightElement) {
