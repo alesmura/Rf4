@@ -4,7 +4,7 @@
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<table class="table table-bordered table-responsive">
+			<table class="table table-bordered table-responsive scrollable">
 				<thead>
 					<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
 						<tr>
@@ -15,7 +15,7 @@
 			                <th><input type="text" th:field="*{lureName}" />
 			                Exact <input type="checkbox" name="exactLureName" th:checked="*{exactLureName}" /></th>
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
-			                <td align="center"><input type="submit" value="Search" /></td>
+			                <th><input type="submit" value="Search" /></th>
 						</tr>
 					</form>
 		            <tr>

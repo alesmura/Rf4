@@ -1,9 +1,21 @@
-body{
-  background-color: #c6cccf;
+body {
+	background-color: #c6cccf;
 }
 
 .div-scroll {
 	margin-top: 120px;
 	max-height: 650px;
 	overflow: auto;
+}
+
+.scrollable table {
+	overflow-y: auto;
+	height: 50vh;
+	/* !!!  HEIGHT MUST BE IN [ vh ] !!! */
+}
+
+.scrollable thead  {
+	background-color: white;
+	position: sticky;
+	top: 0;
 }
