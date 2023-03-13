@@ -4,27 +4,29 @@
 	</head>
 	<body>	
 		<div th:fragment="block-header" class="container collapse navbar-collapse">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/}"><img src="https://rf4game.com/wp-content/themes/rf4/img/RF4_logo_s.png" /></a>
+			<ul class="navbar-nav mr-auto nav-pills" style="vertical-align: middle;">
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" th:href="@{/}">
+						<img src="https://rf4game.com/wp-content/themes/rf4/img/RF4_logo_s.png" style="max-height: 35px;" />
+					</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/fishList}">Fish list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/fishList' ? 'active':''}" th:href="@{/fishList}">Fish list</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/locationList}">Location list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/locationList' ? 'active':''}"  th:href="@{/locationList}">Location list</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/lureList}">Lure list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/lureList' ? 'active':''}"  th:href="@{/lureList}">Lure list</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/catchList}">Catch list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/catchList' ? 'active':''}"  th:href="@{/catchList}">Catch list</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/fishCatchList}">Fish catch list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/fishCatchList' ? 'active':''}"  th:href="@{/fishCatchList}">Fish catch list</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" th:href="@{/lureCatchList}">Lure catch list</a>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/lureCatchList' ? 'active':''}"  th:href="@{/lureCatchList}">Lure catch list</a>
 				</li>
 			</ul>
 		</div>
