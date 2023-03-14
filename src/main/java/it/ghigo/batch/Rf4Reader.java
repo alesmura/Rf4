@@ -37,6 +37,7 @@ public class Rf4Reader implements ItemReader<String> {
 			return null;
 		if (lastIndex >= retList.size()) {
 			retList = null;
+			lastIndex = 0;
 			return null;
 		}
 		return retList.get(lastIndex++);
