@@ -1,0 +1,10 @@
+# Build
+docker build -t rf4 .
+# Run mysql on rf4-net
+docker run --name mysqldb --network=rf4-net -d -p3306:3306 -e MYSQL_ROOT_PASSWORD=root mysql
+# Run rf4 on rf4-net
+docker run --name rf4 --network=rf4-net -d -p 8888:8888  rf4
+# Shell container
+docker exec -it rf4 sh
+# Tail log
+docker logs -f rf4
