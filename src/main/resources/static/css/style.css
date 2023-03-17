@@ -10,7 +10,7 @@ body {
 
 .div-scroll {
 	margin-top: 80px;
-	max-height: 650px;
+	max-height: 800px;
 	overflow: auto;
 }
 

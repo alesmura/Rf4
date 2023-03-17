@@ -26,11 +26,7 @@ public class Rf4Reader implements ItemReader<String> {
 			retList = Collections.synchronizedList(new ArrayList<>());
 			String[] regions = new String[] { "GL", "RU", "DE", "US", "FR", "CN", "PL", "KR", "JP", "ES", "IT", "EN" };
 			Stream.of(regions).forEach(region -> {
-				try {
-					parse(region);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				retList.addAll(parse(region));
 			});
 		}
 		if (retList.isEmpty())
@@ -43,11 +39,27 @@ public class Rf4Reader implements ItemReader<String> {
 		return retList.get(lastIndex++);
 	}
 
-	private void parse(String region) throws Exception {
+	private List<String> parse(String region) {
+		List<String> regionList = new ArrayList<>();
+		try {
+			regionList.addAll(parse(region, true));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			regionList.addAll(parse(region, false));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return regionList;
+	}
+
+	private List<String> parse(String region, boolean weekly) throws Exception {
 		long inizio = System.currentTimeMillis();
-		log.info("START parsing region " + region);
+		log.info("START parsing region " + region + " " + (weekly ? "weekly" : "absolute"));
+		List<String> subList = new ArrayList<>();
 		// Recupera il contenuto della pagina web
-		URL url = new URL("https://rf4game.com/records/weekly/region/" + region + "/");
+		URL url = new URL("https://rf4game.com/records/" + (weekly ? "weekly/" : "") + "region/" + region + "/");
 		String content = Jsoup.parse(url, 30000).outerHtml();
 		// Esegue il parsing del contenuto HTML
 		Document doc = Jsoup.parse(content);
@@ -64,36 +76,42 @@ public class Rf4Reader implements ItemReader<String> {
 					.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
 			Elements records = element.children().select("div.row");
 			for (Element record : records) {
-				Element weightElement = record.select("div.weight").first();
-				if (weightElement == null)
-					continue;
-				String location = record.select("div.location").first().text();
-				Element baitElement = record.select("div.bait_icon").first();
-				String bait = baitElement.attr("title");
-				String baitIcon = Stream.of(baitElement.attr("style").split(";"))//
-						.filter(s -> s.contains("background-image:"))
-						.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
-				String data = record.select("div.data").first().text();
-				//
-				StringBuilder sb = new StringBuilder();
-				sb.append(region).append(Rf4Processor.SEP);
-				sb.append(location).append(Rf4Processor.SEP);
-				sb.append(fish).append(Rf4Processor.SEP);
-				sb.append(fishIcon).append(Rf4Processor.SEP);
-				sb.append(getWeightKg(weightElement)).append(Rf4Processor.SEP);
-				sb.append(bait).append(Rf4Processor.SEP);
-				sb.append(baitIcon).append(Rf4Processor.SEP);
-				sb.append(data);
-				//
-				retList.add(sb.toString());
+				try {
+					Element weightElement = record.select("div.weight").first();
+					if (weightElement == null)
+						continue;
+					String location = record.select("div.location").first().text();
+					Element baitElement = record.select("div.bait_icon").first();
+					String bait = baitElement.attr("title");
+					String baitIcon = Stream.of(baitElement.attr("style").split(";"))//
+							.filter(s -> s.contains("background-image:"))
+							.map(s -> "https:" + StringUtils.substringBetween(s, "'")).findFirst().get();
+					String data = record.select("div.data").first().text();
+					//
+					StringBuilder sb = new StringBuilder();
+					sb.append(region).append(Rf4Processor.SEP);
+					sb.append(location).append(Rf4Processor.SEP);
+					sb.append(fish).append(Rf4Processor.SEP);
+					sb.append(fishIcon).append(Rf4Processor.SEP);
+					sb.append(getWeightKg(weightElement)).append(Rf4Processor.SEP);
+					sb.append(bait).append(Rf4Processor.SEP);
+					sb.append(baitIcon).append(Rf4Processor.SEP);
+					sb.append(data);
+					//
+					subList.add(sb.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		log.info("END parsing region " + region + " in -> " + (System.currentTimeMillis() - inizio));
+		log.info("END parsing region " + region + " " + (weekly ? "weekly" : "absolute") + " in -> "
+				+ (System.currentTimeMillis() - inizio));
+		return subList;
 	}
 
 	private String getWeightKg(Element weightElement) {
 		String text = weightElement.text();
-		String weightStr = StringUtils.substringBeforeLast(text, " ").replace(",", ".");
+		String weightStr = StringUtils.substringBeforeLast(text, " ").replace(",", ".").replace(" ", "");
 		String um = StringUtils.substringAfterLast(text, " ");
 		double weight = Double.valueOf(weightStr);
 		if (StringUtils.equalsIgnoreCase(um, "g"))

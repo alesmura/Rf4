@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" layout:decorate="~{layouts/main}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-md-3" th:each="stat : ${statsList}" style="padding-top: 25px;">
+				<div class="card text-center border-dark" style="width: 18rem;">
+					<div class="card-body">
+						<span th:text="${stat.key}"></span>
+						<span th:text="${stat.value}"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

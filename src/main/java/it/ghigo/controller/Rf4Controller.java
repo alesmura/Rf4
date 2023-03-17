@@ -19,6 +19,7 @@ import it.ghigo.service.CatchService;
 import it.ghigo.service.FishService;
 import it.ghigo.service.LocationService;
 import it.ghigo.service.LureService;
+import it.ghigo.service.StatsService;
 
 @Controller
 public class Rf4Controller {
@@ -34,6 +35,9 @@ public class Rf4Controller {
 
 	@Autowired
 	private CatchService catchService;
+
+	@Autowired
+	private StatsService statsService;
 
 	private static final Logger log = LoggerFactory.getLogger(Rf4Controller.class);
 
@@ -130,5 +134,14 @@ public class Rf4Controller {
 		model.addAttribute("fishCatchList", fishService.findFishLureCatchList());
 		log.info("Fine /fishCatchList -> " + (System.currentTimeMillis() - inizio));
 		return "fishCatchList";
+	}
+
+	@GetMapping("/statsList")
+	public String statsList(Model model) {
+		long inizio = System.currentTimeMillis();
+		log.info("Inizio /statsList");
+		model.addAttribute("statsList", statsService.findAll());
+		log.info("Fine /statsList -> " + (System.currentTimeMillis() - inizio));
+		return "statsList";
 	}
 }
