@@ -13,6 +13,7 @@ mvnw.cmd
 maven-wrapper.jar
 maven-wrapper.properties
 *.sql
+.env
 
 ### STS ###
 .apt_generated

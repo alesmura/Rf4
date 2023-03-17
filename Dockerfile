@@ -8,7 +8,7 @@ RUN apk update
 COPY target/Rf4-0.0.1.jar /app.jar
 
 # Expose port
-EXPOSE 8888
+EXPOSE $SPRING_PORT
 
 # Launch command
 ENTRYPOINT java -jar /app.jar
