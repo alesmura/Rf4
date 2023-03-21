@@ -7,11 +7,13 @@
 <body>
 	<div layout:fragment="content">
 		<div class="row">
-			<div class="col-md-3" th:each="fish : ${fishList}" style="padding-top: 25px;">
+			<div class="col-md-3" th:each="fishInfo : ${fishList}" style="padding-top: 25px;">
 				<div class="card text-center border-dark" style="width: 18rem;">
 					<div class="card-body">
-						<h5 class="card-title" th:text="${fish.name}"></h5>
-						<a th:href="@{/catchList(fishParam=${fish.name})}" class="btn btn-light btn-outline-dark rounded-circle"><img th:src="${fish.icon}" /></a>
+						<h5 class="card-title" th:text="${fishInfo.fish.name}"></h5>
+						<a th:href="@{/catchList(fishParam=${fishInfo.fish.name})}" class="btn btn-light btn-outline-dark rounded-circle"><img th:src="${fishInfo.fish.icon}" /></a>
+						<div>Max weight <div class="d-inline-block" th:text="${fishInfo.maxWeight}"></div> kg</div>
+						<div>Count <div class="d-inline-block" th:text="${fishInfo.count}"></div></div>
 					</div>
 				</div>
 			</div>

@@ -52,7 +52,7 @@ public class Rf4Controller {
 	public String fishList(Model model) {
 		long inizio = System.currentTimeMillis();
 		log.info("Inizio /fishList");
-		model.addAttribute("fishList", fishService.findAll());
+		model.addAttribute("fishList", fishService.findAllFishInfo());
 		log.info("Fine /fishList -> " + (System.currentTimeMillis() - inizio));
 		return "fishList";
 	}

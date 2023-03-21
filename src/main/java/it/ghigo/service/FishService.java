@@ -11,8 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.ghigo.model.Fish;
 import it.ghigo.model.FishCatch;
+import it.ghigo.model.FishInfo;
 import it.ghigo.model.LureCatch;
 import it.ghigo.model.LureFishCatchQueryResult;
 import it.ghigo.repository.CatchRepository;
@@ -31,11 +31,8 @@ public class FishService {
 	@Autowired
 	private LureRepository lureRepository;
 
-	public List<Fish> findAll() {
-		List<Fish> fishList = new ArrayList<>();
-		fishRepository.findAll().forEach(f -> fishList.add(f));
-		Collections.sort(fishList);
-		return fishList;
+	public List<FishInfo> findAllFishInfo() {
+		return fishRepository.findAllFishInfo();
 	}
 
 	public List<FishCatch> findFishLureCatchList() {
