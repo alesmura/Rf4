@@ -1,13 +1,8 @@
 package it.ghigo.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +11,7 @@ import it.ghigo.model.Fish;
 import it.ghigo.model.Location;
 import it.ghigo.model.Lure;
 import it.ghigo.model.parameter.CatchSearchParameter;
+import it.ghigo.repository.CatchFinder;
 import it.ghigo.repository.CatchRepository;
 import it.ghigo.repository.FishRepository;
 import it.ghigo.repository.LocationRepository;
@@ -26,6 +22,9 @@ public class CatchService {
 
 	@Autowired
 	private CatchRepository catchRepository;
+
+	@Autowired
+	private CatchFinder catchFinder;
 
 	@Autowired
 	private FishRepository fishRepository;
@@ -57,40 +56,6 @@ public class CatchService {
 	}
 
 	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) throws Exception {
-		if (catchSearchParameter.isEmpty())
-			return new ArrayList<>();
-		List<Catch> catchList;
-		Date dt = catchSearchParameter.getDt();
-		if (dt == null)
-			dt = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1970");
-		//
-		boolean searchExactFish = StringUtils.isNotBlank(catchSearchParameter.getFishName())
-				&& catchSearchParameter.isExactFishName();
-		boolean searchExactLure = StringUtils.isNotBlank(catchSearchParameter.getLureName())
-				&& catchSearchParameter.isExactLureName();
-		//
-		if (searchExactFish && searchExactLure) {
-			catchList = catchRepository
-					.findByLocationNameContainingIgnoreCaseAndFishNameIgnoreCaseAndLureNameIgnoreCaseAndDtGreaterThanEqual(
-							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
-							catchSearchParameter.getLureName(), dt);
-		} else if (!searchExactFish && searchExactLure) {
-			catchList = catchRepository
-					.findByLocationNameContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureNameIgnoreCaseAndDtGreaterThanEqual(
-							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
-							catchSearchParameter.getLureName(), dt);
-		} else if (searchExactFish && !searchExactLure) {
-			catchList = catchRepository
-					.findByLocationNameContainingIgnoreCaseAndFishNameIgnoreCaseAndLureNameContainingIgnoreCaseAndDtGreaterThanEqual(
-							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
-							catchSearchParameter.getLureName(), dt);
-		} else {
-			catchList = catchRepository
-					.findByLocationNameContainingIgnoreCaseAndFishNameContainingIgnoreCaseAndLureNameContainingIgnoreCaseAndDtGreaterThanEqual(
-							catchSearchParameter.getLocationName(), catchSearchParameter.getFishName(),
-							catchSearchParameter.getLureName(), dt);
-		}
-		Collections.sort(catchList);
-		return catchList;
+		return catchFinder.findByCatchSearchParameter(catchSearchParameter);
 	}
 }

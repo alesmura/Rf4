@@ -44,7 +44,6 @@ public class Rf4Batch {
 		}
 	}
 
-	@Bean
 	public Step getStep() {
 		return stepBuilderFactory.get("step") //
 				.<String, Catch>chunk(1000)//
