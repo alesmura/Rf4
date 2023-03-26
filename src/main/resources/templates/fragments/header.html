@@ -5,6 +5,7 @@
 	<body>	
 		<div th:fragment="block-header" class="container collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto nav-pills" style="vertical-align: middle;">
+				<li class="nav-item"><div id="txt" class="nav-link" style="color:white;">00:00</div></li>
 				<li class="nav-item">
 					<a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" th:href="@{/}">
 						<img src="https://rf4game.com/wp-content/themes/rf4/img/RF4_logo_s.png" style="max-height: 35px;" />
