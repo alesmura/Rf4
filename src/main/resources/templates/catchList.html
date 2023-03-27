@@ -13,7 +13,8 @@
 			                Exact <input type="checkbox" name="exactFishName" th:checked="*{exactFishName}" /></th>
 			                <th></th>
 			                <th><input type="text" th:field="*{lureName}" />
-			                Exact <input type="checkbox" name="exactLureName" th:checked="*{exactLureName}" /></th>
+			                Exact <input type="checkbox" name="exactLureName" th:checked="*{exactLureName}" />
+			                Not <input type="checkbox" name="notLureName" th:checked="*{notLureName}" /></th>
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
 			                <th><input type="submit" value="Search" /></th>
 						</tr>

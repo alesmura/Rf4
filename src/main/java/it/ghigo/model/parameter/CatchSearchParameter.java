@@ -13,6 +13,7 @@ public class CatchSearchParameter implements Serializable {
 	private boolean exactFishName = false;
 	private String fishName = "";
 	private boolean exactLureName = false;
+	private boolean notLureName = false;
 	private String lureName = "";
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dt;
@@ -76,5 +77,13 @@ public class CatchSearchParameter implements Serializable {
 		if (getDt() != null)
 			return false;
 		return true;
+	}
+
+	public boolean isNotLureName() {
+		return notLureName;
+	}
+
+	public void setNotLureName(boolean notLureName) {
+		this.notLureName = notLureName;
 	}
 }

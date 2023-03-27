@@ -44,22 +44,10 @@ public class CatchFinder {
 			predicateList.add(builder.like(builder.upper(locationName),
 					"%" + catchSearchParameter.getLocationName().toUpperCase() + "%"));
 		}
-		if (StringUtils.isNotBlank(catchSearchParameter.getFishName())) {
-			if (catchSearchParameter.isExactFishName())
-				predicateList
-						.add(builder.equal(builder.upper(fishName), catchSearchParameter.getFishName().toUpperCase()));
-			else
-				predicateList.add(builder.like(builder.upper(fishName),
-						"%" + catchSearchParameter.getFishName().toUpperCase() + "%"));
-		}
-		if (StringUtils.isNotBlank(catchSearchParameter.getLureName())) {
-			if (catchSearchParameter.isExactLureName())
-				predicateList
-						.add(builder.equal(builder.upper(lureName), catchSearchParameter.getLureName().toUpperCase()));
-			else
-				predicateList.add(builder.like(builder.upper(lureName),
-						"%" + catchSearchParameter.getLureName().toUpperCase() + "%"));
-		}
+		if (StringUtils.isNotBlank(catchSearchParameter.getFishName()))
+			predicateList.add(getPredicateFish(builder, fishName, catchSearchParameter));
+		if (StringUtils.isNotBlank(catchSearchParameter.getLureName()))
+			predicateList.add(getPredicateLure(builder, lureName, catchSearchParameter));
 		if (catchSearchParameter.getDt() != null) {
 			predicateList.add(builder.greaterThanOrEqualTo(dt, catchSearchParameter.getDt()));
 		}
@@ -80,5 +68,24 @@ public class CatchFinder {
 //		q.setFirstResult((pageNumber - 1) * pageSize);
 //		q.setMaxResults(pageSize);
 		return q.getResultList();
+	}
+
+	private Predicate getPredicateFish(CriteriaBuilder builder, Path<String> fishName,
+			CatchSearchParameter catchSearchParameter) {
+		if (catchSearchParameter.isExactFishName())
+			return builder.equal(builder.upper(fishName), catchSearchParameter.getFishName().toUpperCase());
+		return builder.like(builder.upper(fishName), "%" + catchSearchParameter.getFishName().toUpperCase() + "%");
+	}
+
+	private Predicate getPredicateLure(CriteriaBuilder builder, Path<String> lureName,
+			CatchSearchParameter catchSearchParameter) {
+		if (catchSearchParameter.isExactLureName()) {
+			if (!catchSearchParameter.isNotLureName())
+				return builder.equal(builder.upper(lureName), catchSearchParameter.getLureName().toUpperCase());
+			return builder.notEqual(builder.upper(lureName), catchSearchParameter.getLureName().toUpperCase());
+		}
+		if (!catchSearchParameter.isNotLureName())
+			return builder.like(builder.upper(lureName), "%" + catchSearchParameter.getLureName().toUpperCase() + "%");
+		return builder.notLike(builder.upper(lureName), "%" + catchSearchParameter.getLureName().toUpperCase() + "%");
 	}
 }
