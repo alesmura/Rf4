@@ -2,7 +2,6 @@ package it.ghigo.batch;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,7 +22,7 @@ public class Rf4Reader implements ItemReader<String> {
 	@Override
 	public String read() throws Exception {
 		if (retList == null) {
-			retList = Collections.synchronizedList(new ArrayList<>());
+			retList = new ArrayList<>();
 			String[] regions = new String[] { "GL", "RU", "DE", "US", "FR", "CN", "PL", "KR", "JP", "ES", "IT", "EN" };
 			Stream.of(regions).forEach(region -> {
 				retList.addAll(parse(region));
