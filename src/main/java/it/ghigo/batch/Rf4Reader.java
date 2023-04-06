@@ -21,7 +21,7 @@ public class Rf4Reader implements ItemReader<String> {
 
 	@Override
 	public String read() throws Exception {
-		if (retList == null) {
+		if (retList == null || retList.isEmpty()) {
 			retList = new ArrayList<>();
 			String[] regions = new String[] { "GL", "RU", "DE", "US", "FR", "CN", "PL", "KR", "JP", "ES", "IT", "EN" };
 			Stream.of(regions).forEach(region -> {
