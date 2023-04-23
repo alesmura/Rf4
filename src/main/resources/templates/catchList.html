@@ -5,6 +5,33 @@
 	<body>
 		<div layout:fragment="content">
 			<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item" th:if="${pageCatch.number > 0}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="0">
+								<span class="sr-only">Start</span>
+							</button>
+						</li>
+						<li class="page-item" th:if="${pageCatch.number > 0}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number - 1}">
+								<span class="sr-only">Prev.</span>
+							</button>
+						</li>
+						<li class="page-item">
+							<div th:text="${pageCatch.number}" />
+						</li>
+						<li class="page-item" th:if="${!pageCatch.last}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number + 1}">
+								<span class="sr-only">Next</span>
+							</button>
+						</li>
+						<li class="page-item" th:if="${!pageCatch.last}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages - 1}">
+								<span class="sr-only">End</span>
+							</button>
+						</li>
+					</ul>
+				</nav>
 				<table class="table table-bordered table-responsive scrollable">
 					<thead>
 						<tr>
@@ -38,33 +65,6 @@
 				        </tr>
 					</tbody>
 				</table>
-				<nav aria-label="Page navigation example">
-					<ul class="pagination">
-						<li class="page-item" th:if="${pageCatch.number > 1}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="1">
-								<span class="sr-only">Start</span>
-							</button>
-						</li>
-						<li class="page-item" th:if="${pageCatch.number > 1}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number - 1}">
-								<span class="sr-only">Prev.</span>
-							</button>
-						</li>
-						<li class="page-item">
-							<div th:text="${pageCatch.number}" />
-						</li>
-						<li class="page-item" th:if="${!pageCatch.last}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number + 1}">
-								<span class="sr-only">Next</span>
-							</button>
-						</li>
-						<li class="page-item" th:if="${!pageCatch.last}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages}">
-								<span class="sr-only">End</span>
-							</button>
-						</li>
-					</ul>
-				</nav>
 			</form>
 		</div>
 	</body>
