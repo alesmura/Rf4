@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "my.stop-batch",
+  "type": "java.lang.Boolean",
+  "description": "Default: false\n\nUsed to debug application without batching the http requestes."
+}]}

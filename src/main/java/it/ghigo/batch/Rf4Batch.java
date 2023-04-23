@@ -11,6 +11,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import it.ghigo.model.Catch;
@@ -24,9 +25,13 @@ public class Rf4Batch {
 	private StepBuilderFactory stepBuilderFactory;
 	@Autowired
 	private JobLauncher jobLauncher;
+	@Autowired
+	private Environment env;
 
 	@Scheduled(fixedDelay = 300_000)
 	public void run() {
+		if (Boolean.valueOf(env.getProperty("my.stop-batch")))
+			return;
 		try {
 			JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
 					.toJobParameters();
