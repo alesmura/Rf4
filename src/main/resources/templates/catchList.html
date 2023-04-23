@@ -4,9 +4,9 @@
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<table class="table table-bordered table-responsive scrollable">
-				<thead>
-					<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+			<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+				<table class="table table-bordered table-responsive scrollable">
+					<thead>
 						<tr>
 							<th><input type="text" th:field="*{locationName}" /></th>
 			                <th><input type="text" th:field="*{fishName}" />
@@ -18,27 +18,54 @@
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
 			                <th><input type="submit" value="Search" /></th>
 						</tr>
-					</form>
-		            <tr>
-		                <th>Location</th>
-		                <th>Fish</th>
-		                <th>Weight kg</th>
-		                <th>Lure</th>
-		                <th>Date</th>
-		                <th>Region</th>
-		            </tr>
-				</thead>
-				<tbody>
-					<tr th:each="catch : ${catchList}">
-			            <td th:text="${catch.location.name}"></td>
-			            <td th:text="${catch.fish.name}"></td>
-			            <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
-			            <td th:text="${catch.lure.name}"></td>
-			            <td th:text="${#dates.format(catch.dt, 'dd/MM/YY')}" align="center"></td>
-			            <td th:text="${catch.region}" align="center"></td>
-			        </tr>
-				</tbody>
-			</table>                      
+			            <tr>
+			                <th>Location</th>
+			                <th>Fish</th>
+			                <th>Weight kg</th>
+			                <th>Lure</th>
+			                <th>Date</th>
+			                <th>Region</th>
+			            </tr>
+					</thead>
+					<tbody>
+						<tr th:each="catch : ${pageCatch.content}">
+				            <td th:text="${catch.location.name}"></td>
+				            <td th:text="${catch.fish.name}"></td>
+				            <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
+				            <td th:text="${catch.lure.name}"></td>
+				            <td th:text="${#dates.format(catch.dt, 'dd/MM/YY')}" align="center"></td>
+				            <td th:text="${catch.region}" align="center"></td>
+				        </tr>
+					</tbody>
+				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item" th:if="${pageCatch.number > 1}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="1">
+								<span class="sr-only">Start</span>
+							</button>
+						</li>
+						<li class="page-item" th:if="${pageCatch.number > 1}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number - 1}">
+								<span class="sr-only">Prev.</span>
+							</button>
+						</li>
+						<li class="page-item">
+							<div th:text="${pageCatch.number}" />
+						</li>
+						<li class="page-item" th:if="${!pageCatch.last}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number + 1}">
+								<span class="sr-only">Next</span>
+							</button>
+						</li>
+						<li class="page-item" th:if="${!pageCatch.last}">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages}">
+								<span class="sr-only">End</span>
+							</button>
+						</li>
+					</ul>
+				</nav>
+			</form>
 		</div>
 	</body>
 </html>

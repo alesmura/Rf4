@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class Rf4Controller {
 
 	private static final Logger log = LoggerFactory.getLogger(Rf4Controller.class);
 
+	private static int PAGE_SIZE = 10;
 	//
 
 	@GetMapping("/")
@@ -81,7 +83,7 @@ public class Rf4Controller {
 			Model model) throws Exception {
 		long inizio = System.currentTimeMillis();
 		log.info("Inizio /catchList");
-		CatchSearchParameter catchSearchParameter = new CatchSearchParameter();
+		CatchSearchParameter catchSearchParameter = new CatchSearchParameter(PageRequest.of(0, PAGE_SIZE));
 		//
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar cal = Calendar.getInstance();
@@ -101,19 +103,27 @@ public class Rf4Controller {
 			cal.add(Calendar.DAY_OF_YEAR, -3);
 		}
 		catchSearchParameter.setDt(cal.getTime());
+
+		if (StringUtils.isBlank(catchSearchParameter.getLureName())) {
+			catchSearchParameter.setNotLureName(true);
+			catchSearchParameter.setLureName("BALSA");
+		}
+		//
 		model.addAttribute("catchSearchParameter", catchSearchParameter);
-		model.addAttribute("catchList", catchService.findByCatchSearchParameter(catchSearchParameter));
+		model.addAttribute("pageCatch", catchService.findByCatchSearchParameter(catchSearchParameter));
 		log.info("Fine /catchList -> " + (System.currentTimeMillis() - inizio));
 		return "catchList";
 	}
 
 	@PostMapping("/catchList")
-	public String catchListSubmit(@ModelAttribute CatchSearchParameter catchSearchParameter, Model model)
-			throws Exception {
+	public String catchListSubmit(@ModelAttribute CatchSearchParameter catchSearchParameter, Model model,
+			@RequestParam(defaultValue = "0") String paramPage) throws Exception {
 		long inizio = System.currentTimeMillis();
 		log.info("Inizio /catchList");
-		model.addAttribute("catchSearch", catchSearchParameter);
-		model.addAttribute("catchList", catchService.findByCatchSearchParameter(catchSearchParameter));
+		if (StringUtils.isNotBlank(paramPage) && StringUtils.isNumeric(paramPage))
+			catchSearchParameter.setPageable(PageRequest.of(Integer.valueOf(paramPage), PAGE_SIZE));
+		model.addAttribute("catchSearchParameter", catchSearchParameter);
+		model.addAttribute("pageCatch", catchService.findByCatchSearchParameter(catchSearchParameter));
 		log.info("Fine /catchList -> " + (System.currentTimeMillis() - inizio));
 		return "catchList";
 	}

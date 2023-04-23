@@ -1,9 +1,9 @@
 package it.ghigo.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import it.ghigo.model.Catch;
@@ -55,7 +55,7 @@ public class CatchService {
 		return catchRepository.save(c);
 	}
 
-	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) throws Exception {
+	public Page<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) throws Exception {
 		return catchFinder.findByCatchSearchParameter(catchSearchParameter);
 	}
 }
