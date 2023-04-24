@@ -5,33 +5,6 @@
 	<body>
 		<div layout:fragment="content">
 			<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
-				<nav aria-label="Page navigation example">
-					<ul class="pagination">
-						<li class="page-item" th:if="${pageCatch.number > 0}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="0">
-								<span class="sr-only">Start</span>
-							</button>
-						</li>
-						<li class="page-item" th:if="${pageCatch.number > 0}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number - 1}">
-								<span class="sr-only">Prev.</span>
-							</button>
-						</li>
-						<li class="page-item">
-							<div th:text="${pageCatch.number}" />
-						</li>
-						<li class="page-item" th:if="${!pageCatch.last}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.number + 1}">
-								<span class="sr-only">Next</span>
-							</button>
-						</li>
-						<li class="page-item" th:if="${!pageCatch.last}">
-							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages - 1}">
-								<span class="sr-only">End</span>
-							</button>
-						</li>
-					</ul>
-				</nav>
 				<table class="table table-bordered table-responsive scrollable">
 					<thead>
 						<tr>
@@ -43,7 +16,9 @@
 			                Exact <input type="checkbox" name="exactLureName" th:checked="*{exactLureName}" />
 			                Not <input type="checkbox" name="notLureName" th:checked="*{notLureName}" /></th>
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
-			                <th><input type="submit" value="Search" /></th>
+			                <th>
+								<button type="submit" class="btn btn-primary">Search</button>
+							</th>
 						</tr>
 			            <tr>
 			                <th>Location</th>
@@ -65,6 +40,39 @@
 				        </tr>
 					</tbody>
 				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="0" th:disabled="${pageCatch.first}" 
+								th:classappend="${pageCatch.number == 0} ? btn-dark : 'btn-link page-link'">
+								Start
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="${pageCatch.number - 1}" th:disabled="${pageCatch.first}" 
+								th:classappend="${pageCatch.number == 0} ? btn-dark : 'btn-link page-link'">
+								Prev.
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<div class="d-inline-block">
+								Pg <span th:text="${#numbers.formatInteger(pageCatch.number + 1,2)}"/>
+							</div>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="${pageCatch.number + 1}" th:disabled="${pageCatch.last}" 
+								th:classappend="${pageCatch.last} ? btn-dark : 'btn-link page-link'">
+								Next
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages - 1}" th:disabled="${pageCatch.last}"
+								th:classappend="${pageCatch.last} ? btn-dark : 'btn-link page-link'">
+								End
+							</button>
+						</li>
+					</ul>
+				</nav>
 			</form>
 		</div>
 	</body>

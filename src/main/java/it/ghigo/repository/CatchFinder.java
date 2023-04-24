@@ -32,10 +32,8 @@ public class CatchFinder {
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Catch> querySelect = builder.createQuery(Catch.class);
-		CriteriaQuery<Long> queryCount = builder.createQuery(Long.class);
 		//
 		prepeareQuerySelect(builder, querySelect, catchSearchParameter);
-		prepeareQueryCount(builder, queryCount, catchSearchParameter);
 		//
 		List<Catch> catchList = entityManager.createQuery(querySelect).getResultList();
 		Pageable pageable = catchSearchParameter.getPageable();
@@ -68,15 +66,6 @@ public class CatchFinder {
 		List<Predicate> predicateList = getPredicateList(builder, c, catchSearchParameter);
 		query.select(c).where(builder.and(predicateList.toArray(new Predicate[predicateList.size()])))
 				.orderBy(orderByList);
-	}
-
-	private void prepeareQueryCount(CriteriaBuilder builder, CriteriaQuery<Long> query,
-			CatchSearchParameter catchSearchParameter) {
-		Root<Catch> c = query.from(Catch.class);
-		//
-		List<Predicate> predicateList = getPredicateList(builder, c, catchSearchParameter);
-		query.select(builder.count(builder.literal(1)))
-				.where(builder.and(predicateList.toArray(new Predicate[predicateList.size()])));
 	}
 
 	private List<Predicate> getPredicateList(CriteriaBuilder builder, Root<Catch> c,
