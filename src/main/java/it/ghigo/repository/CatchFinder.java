@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -38,18 +37,15 @@ public class CatchFinder {
 		prepeareQuerySelect(builder, querySelect, catchSearchParameter);
 		prepeareQueryCount(builder, queryCount, catchSearchParameter);
 		//
-		Query qCount = entityManager.createQuery(queryCount);
-		long inizio = System.currentTimeMillis();
-		long totalResult = (long) qCount.getSingleResult();
-		System.out.println("Tempo total result -> " + (System.currentTimeMillis() - inizio));
-		//
+		List<Catch> catchList = entityManager.createQuery(querySelect).getResultList();
 		Pageable pageable = catchSearchParameter.getPageable();
 		int pageNumber = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
-		Query qSelect = entityManager.createQuery(querySelect);
-		qSelect.setFirstResult(pageNumber * pageSize);
-		qSelect.setMaxResults(pageSize);
-		return new PageImpl<>(qSelect.getResultList(), pageable, totalResult);
+		int first = pageNumber * pageSize;
+		int last = first + pageSize;
+		if (last > catchList.size())
+			last = catchList.size();
+		return new PageImpl<>(catchList.subList(first, last), pageable, catchList.size());
 	}
 
 	private void prepeareQuerySelect(CriteriaBuilder builder, CriteriaQuery<Catch> query,
