@@ -5,7 +5,7 @@
 	<body>
 		<div layout:fragment="content">
 			<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
-				<table class="table table-bordered table-responsive scrollable">
+				<table class="table table-bordered table-responsive catch-table">
 					<thead>
 						<tr>
 							<th><input type="text" th:field="*{locationName}" /></th>

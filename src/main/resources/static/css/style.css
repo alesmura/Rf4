@@ -8,19 +8,10 @@ body {
 	line-height: 40px;
 }
 
-.div-scroll {
-	margin-top: 80px;
-	max-height: 800px;
-	overflow: auto;
+.mt-80 {
+  margin-top: 80px; !important;
 }
 
-.scrollable table {
-	overflow-y: auto;
-	height: 50vh;
-}
-
-.scrollable thead {
+.catch-table thead {
 	background-color: white;
-	position: sticky;
-	top: 0;
 }
