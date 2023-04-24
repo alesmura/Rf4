@@ -4,9 +4,9 @@
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<table class="table table-bordered table-responsive scrollable">
-				<thead>
-					<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+			<form action="#" th:action="@{/catchList}" th:object="${catchSearchParameter}" method="post">
+				<table class="table table-bordered table-responsive scrollable">
+					<thead>
 						<tr>
 							<th><input type="text" th:field="*{locationName}" /></th>
 			                <th><input type="text" th:field="*{fishName}" />
@@ -16,29 +16,64 @@
 			                Exact <input type="checkbox" name="exactLureName" th:checked="*{exactLureName}" />
 			                Not <input type="checkbox" name="notLureName" th:checked="*{notLureName}" /></th>
 			                <th><input type="date" th:field="*{dt}" th:value="*{#dates.format(dt, 'dd/MM/YY')}" /></th>
-			                <th><input type="submit" value="Search" /></th>
+			                <th>
+								<button type="submit" class="btn btn-primary">Search</button>
+							</th>
 						</tr>
-					</form>
-		            <tr>
-		                <th>Location</th>
-		                <th>Fish</th>
-		                <th>Weight kg</th>
-		                <th>Lure</th>
-		                <th>Date</th>
-		                <th>Region</th>
-		            </tr>
-				</thead>
-				<tbody>
-					<tr th:each="catch : ${catchList}">
-			            <td th:text="${catch.location.name}"></td>
-			            <td th:text="${catch.fish.name}"></td>
-			            <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
-			            <td th:text="${catch.lure.name}"></td>
-			            <td th:text="${#dates.format(catch.dt, 'dd/MM/YY')}" align="center"></td>
-			            <td th:text="${catch.region}" align="center"></td>
-			        </tr>
-				</tbody>
-			</table>                      
+			            <tr>
+			                <th>Location</th>
+			                <th>Fish</th>
+			                <th>Weight kg</th>
+			                <th>Lure</th>
+			                <th>Date</th>
+			                <th>Region</th>
+			            </tr>
+					</thead>
+					<tbody>
+						<tr th:each="catch : ${pageCatch.content}">
+				            <td th:text="${catch.location.name}"></td>
+				            <td th:text="${catch.fish.name}"></td>
+				            <td th:text="${#numbers.formatDecimal(catch.weightKg,1,3,'COMMA')}" align="right"></td>
+				            <td th:text="${catch.lure.name}"></td>
+				            <td th:text="${#dates.format(catch.dt, 'dd/MM/YY')}" align="center"></td>
+				            <td th:text="${catch.region}" align="center"></td>
+				        </tr>
+					</tbody>
+				</table>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="0" th:disabled="${pageCatch.first}" 
+								th:classappend="${pageCatch.number == 0} ? btn-dark : 'btn-link page-link'">
+								Start
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="${pageCatch.number - 1}" th:disabled="${pageCatch.first}" 
+								th:classappend="${pageCatch.number == 0} ? btn-dark : 'btn-link page-link'">
+								Prev.
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<div class="d-inline-block">
+								Pg <span th:text="${#numbers.formatInteger(pageCatch.number + 1,2)}"/>
+							</div>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn" name="paramPage" th:value="${pageCatch.number + 1}" th:disabled="${pageCatch.last}" 
+								th:classappend="${pageCatch.last} ? btn-dark : 'btn-link page-link'">
+								Next
+							</button>
+						</li>
+						<li class="page-item p-1">
+							<button type="submit" class="btn btn-link page-link" name="paramPage" th:value="${pageCatch.totalPages - 1}" th:disabled="${pageCatch.last}"
+								th:classappend="${pageCatch.last} ? btn-dark : 'btn-link page-link'">
+								End
+							</button>
+						</li>
+					</ul>
+				</nav>
+			</form>
 		</div>
 	</body>
 </html>

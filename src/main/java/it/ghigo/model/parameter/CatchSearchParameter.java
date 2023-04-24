@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class CatchSearchParameter implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//
+	private Pageable pageable;
 	private String locationName = "";
 	private boolean exactFishName = false;
 	private String fishName = "";
@@ -17,6 +19,12 @@ public class CatchSearchParameter implements Serializable {
 	private String lureName = "";
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dt;
+
+	//
+	public CatchSearchParameter(Pageable pageable) {
+		super();
+		this.pageable = pageable;
+	}
 
 	//
 	public String getLocationName() {
@@ -85,5 +93,13 @@ public class CatchSearchParameter implements Serializable {
 
 	public void setNotLureName(boolean notLureName) {
 		this.notLureName = notLureName;
+	}
+
+	public Pageable getPageable() {
+		return pageable;
+	}
+
+	public void setPageable(Pageable pageable) {
+		this.pageable = pageable;
 	}
 }

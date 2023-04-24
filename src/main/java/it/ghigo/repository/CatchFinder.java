@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -15,6 +14,9 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import it.ghigo.model.Catch;
 import it.ghigo.model.parameter.CatchSearchParameter;
@@ -24,19 +26,53 @@ public class CatchFinder {
 	private EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
-	public List<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) {
+	public Page<Catch> findByCatchSearchParameter(CatchSearchParameter catchSearchParameter) {
 		if (catchSearchParameter.isEmpty())
-			return new ArrayList<>();
+			return new PageImpl<>(new ArrayList<>());
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Catch> query = builder.createQuery(Catch.class);
+		CriteriaQuery<Catch> querySelect = builder.createQuery(Catch.class);
 		//
+		prepeareQuerySelect(builder, querySelect, catchSearchParameter);
+		//
+		List<Catch> catchList = entityManager.createQuery(querySelect).getResultList();
+		Pageable pageable = catchSearchParameter.getPageable();
+		int pageNumber = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int first = pageNumber * pageSize;
+		int last = first + pageSize;
+		if (last > catchList.size())
+			last = catchList.size();
+		return new PageImpl<>(catchList.subList(first, last), pageable, catchList.size());
+	}
+
+	private void prepeareQuerySelect(CriteriaBuilder builder, CriteriaQuery<Catch> query,
+			CatchSearchParameter catchSearchParameter) {
 		Root<Catch> c = query.from(Catch.class);
 		//
 		Path<String> locationName = c.join("location").get("name");
 		Path<String> fishName = c.join("fish").get("name");
 		Path<String> lureName = c.join("lure").get("name");
 		Path<Double> weightKg = c.get("weightKg");
+		Path<Date> dt = c.get("dt");
+		//
+		List<Order> orderByList = new ArrayList<>();
+		orderByList.add(builder.asc(locationName));
+		orderByList.add(builder.asc(fishName));
+		orderByList.add(builder.desc(weightKg));
+		orderByList.add(builder.desc(dt));
+		orderByList.add(builder.asc(lureName));
+		//
+		List<Predicate> predicateList = getPredicateList(builder, c, catchSearchParameter);
+		query.select(c).where(builder.and(predicateList.toArray(new Predicate[predicateList.size()])))
+				.orderBy(orderByList);
+	}
+
+	private List<Predicate> getPredicateList(CriteriaBuilder builder, Root<Catch> c,
+			CatchSearchParameter catchSearchParameter) {
+		Path<String> locationName = c.join("location").get("name");
+		Path<String> fishName = c.join("fish").get("name");
+		Path<String> lureName = c.join("lure").get("name");
 		Path<Date> dt = c.get("dt");
 		//
 		List<Predicate> predicateList = new ArrayList<>();
@@ -48,26 +84,10 @@ public class CatchFinder {
 			predicateList.add(getPredicateFish(builder, fishName, catchSearchParameter));
 		if (StringUtils.isNotBlank(catchSearchParameter.getLureName()))
 			predicateList.add(getPredicateLure(builder, lureName, catchSearchParameter));
-		if (catchSearchParameter.getDt() != null) {
+		if (catchSearchParameter.getDt() != null)
 			predicateList.add(builder.greaterThanOrEqualTo(dt, catchSearchParameter.getDt()));
-		}
 		//
-		List<Order> orderByList = new ArrayList<>();
-		orderByList.add(builder.asc(locationName));
-		orderByList.add(builder.asc(fishName));
-		orderByList.add(builder.desc(weightKg));
-		orderByList.add(builder.desc(dt));
-		orderByList.add(builder.asc(lureName));
-		//
-		query.select(c).where(builder.and(predicateList.toArray(new Predicate[predicateList.size()])))
-				.orderBy(orderByList);
-		//
-		Query q = entityManager.createQuery(query);
-//		int pageNumber = 1500;
-//		int pageSize = 10;
-//		q.setFirstResult((pageNumber - 1) * pageSize);
-//		q.setMaxResults(pageSize);
-		return q.getResultList();
+		return predicateList;
 	}
 
 	private Predicate getPredicateFish(CriteriaBuilder builder, Path<String> fishName,
