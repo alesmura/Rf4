@@ -15,7 +15,7 @@
 					<tr th:each="lureCatch : ${lureCatchList}">
 						<td>
 							<div class="row">
-								<div class="col-md-3 p-1">
+								<div class="col p-1">
 									<div class="card text-center border-dark" style="width: 10rem; height: 10rem;">
 										<div class="card-body">
 											<h8 class="card-title" th:text="${lureCatch.lureName}"></h8>
@@ -28,7 +28,7 @@
 						</td>
 			            <td>
 							<div class="row">
-								<div class="col-md-2 p-1" th:each="fishCatch : ${lureCatch.fishCatchList}">
+								<div class="col p-1" th:each="fishCatch : ${lureCatch.fishCatchList}">
 									<div class="card text-center border-dark" style="width: 10rem; height: 10rem;">
 										<div class="card-body">
 											<h8 class="card-title" th:text="${fishCatch.fishName}"></h8>
