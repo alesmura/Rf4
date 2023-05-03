@@ -1,0 +1,1 @@
+openssl pkcs12 -export -in /etc/letsencrypt/live/${HOST_NAME}/fullchain.pem -inkey /etc/letsencrypt/live/${HOST_NAME}/privkey.pem -out keystore/rf4.p12 -name rf4 -CAfile chain.pem -caname root

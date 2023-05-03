@@ -11,7 +11,7 @@ COPY pom.xml /home/rf4
 RUN mvn -f /home/rf4/pom.xml clean install
 
 # Base image java 17
-FROM eclipse-temurin:17.0.6_10-jre-alpine
+FROM eclipse-temurin:17-jre
 
 # Update
 RUN apk update
